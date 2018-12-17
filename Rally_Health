@@ -1,1 +1,75 @@
-file
+// Title:            Online Assesment for Rally Health
+// Author:           (Yan Nan)
+// Email:            (yann@cs.wisc.edu)
+import java.util.ArrayList;
+import java.util.List;
+class Solution {
+	public static void main(String args[]) {
+		String res = CorrespondOut("2000\n" + 
+				"2100100\n" + 
+				"77");
+		System.out.print(res);
+    }
+	/**
+   	 * @param input  
+   	 * 			the input string
+   	 * @return res all the possible solutions to every input line
+   	 */
+	public static String CorrespondOut(String input) {
+		String res = "";
+		String[] lines = input.split("\\r?\\n");
+		int target = Integer.valueOf(lines[0]);
+		for (int i = 1; i < lines.length; i++) {
+		  List<String> ans = addOperators(lines[i],target);
+		  if (ans.size() == 0) res += "\n" + "\n" + "impossible";
+		  for (String a : ans) System.out.println("\n" + a);
+		} 
+		return res;
+		
+	}
+
+    public static int final_ans; public static String line;
+    /**
+   	 * @param num  
+   	 * 			the input string
+   	 * @param target 
+   	 * 			the target number we should get using string with valid +-*
+   	 * @return all the possible solutions
+   	 */
+    public static List<String> addOperators(String num, int target) {
+        final_ans = target; line = num;
+        List<String> res = new ArrayList<>();
+        dfs(res, "", 0, 0, 0);
+        return res;
+    }
+    /**
+	 * @param path  
+	 * 			the path before we add the current number
+	 * @param start 
+	 * 			the position for input string we start to find next number
+	 * @param value 
+	 * 			the value the expression get before current number
+	 * @param multiply 
+	 * 			the value we add to the value last operation to help us 
+	 * 			do multiply operation this time
+	 */
+    private static void dfs(List<String> res, String path, int start, long value, long multiply) {
+        if (start == line.length()) {
+            if (value == final_ans) res.add(path);
+            return;
+        }
+        for (int i = start; i < line.length(); i++) {
+            // handle 000 case
+            if (i != start && line.charAt(start) == '0') break;
+            long curt = Long.valueOf(line.substring(start, i+1));
+            if (start == 0) {
+                dfs(res, path + curt, i+1, curt, curt);
+            } else {
+            	dfs(res, path + "*" + curt, i + 1, value - multiply + multiply*curt,  multiply*curt);
+                dfs(res, path + "-" + curt, i + 1, value - curt, -curt);
+                dfs(res, path + "+" + curt, i + 1, value + curt, curt);
+                
+            }
+        }
+    }
+}
