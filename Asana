@@ -1,0 +1,70 @@
+/*
+Algorithm : find the exact center of the matrix, if there is no exact center, 
+start with the square closet to the center with the highest carrot;
+*/
+class Solution {
+	public static void main(String args[]) {
+		int[][] matrix = {{5, 7, 8, 6, 3},
+		                  {0, 0, 7, 0, 4},
+		                  {4, 6, 3, 4, 9},
+		                  {3, 1, 0, 5, 8}};
+		Solution h = new Solution();
+		int res = h.hungryRabbit(matrix);
+		System.out.println(res);
+    }
+	public int res;
+	public int hungryRabbit(int[][] matrix) {
+		// corner case
+		if (matrix == null || matrix.length == 0 || matrix[0].length == 0) return 0;
+		int M = matrix.length, N = matrix[0].length;
+		// choose start range
+		int start_row, end_row, start_col, end_col;
+		if (M % 2 == 1) {
+			start_row = end_row = M / 2;
+		} else {
+			start_row = M / 2 - 1; end_row = M / 2;
+		}
+		if (N % 2 == 1) {
+			start_col = end_col = N / 2;
+		} else {
+			start_col = N / 2 - 1; end_col = N / 2;
+		}
+		// the start position
+		int starti = start_row, startj = start_col; 
+		for (int i = start_row; i <= end_row; i++) {
+			for (int j = start_col; j <= end_col; j++) {
+				if (matrix[i][j] > matrix[starti][startj]) {
+					starti = i; startj = j;
+				}
+			}
+		}
+		//System.out.println(starti);System.out.println(startj);
+		boolean[][] visit = new boolean[M][N];
+		DFS(starti, startj, matrix, visit);
+		return res;
+	}
+	public int[][] dir = {{-1, 0},{1, 0},{0, 1},{0, -1}};
+	/*
+	 * every time, add current number of carrot to res;
+	 * find next valid start position
+	 */
+	public void DFS(int i, int j, int[][] matrix, boolean[][] visit) {
+		res += matrix[i][j]; visit[i][j] = true;
+		int nexti = -1, nextj = -1;
+		for (int[] d : dir) {
+			int x = i + d[0], y = j + d[1];
+			if (x < 0 || x > matrix.length || y < 0 || y > matrix[0].length || visit[x][y] || matrix[x][y] == 0) continue;
+			if (nexti == -1 && nextj == -1) {
+				nexti = x; nextj = y; continue;
+			}
+			if (matrix[x][y] > matrix[nexti][nextj]) {
+				nexti = x; nextj = y;
+			}
+		}
+		// if there is no valid next position, the rabbit will fall asleep;
+		if (nexti == -1 && nextj == -1) {
+			return;
+		}
+		DFS(nexti, nextj, matrix, visit);
+	}
+}
