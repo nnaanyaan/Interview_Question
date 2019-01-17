@@ -1,0 +1,39 @@
+public int caculate(String s) {
+		s = s.replaceAll("mul", "*").replaceAll("add", "+");
+		char[] temp = s.toCharArray();
+		Stack<Integer> number = new Stack<>();
+		Stack<Character> sign = new Stack<>();
+		for (char c : temp) {
+			if (Character.isDigit(c)) {
+				number.add(c - '0');
+			} else if (c == '(') {
+				number.add(-1);
+			} else if (c == '*' || c == '+') {
+				sign.add(c);
+			} else if (c == ')'){
+				char use = sign.pop();
+				List<Integer> list = new ArrayList<>();
+				while (!number.isEmpty() && number.peek()!= -1) {
+					int currnum = number.pop();
+					list.add(currnum);
+				}
+				if (!number.isEmpty()) number.pop();
+				if (use == '*') {
+					int res = 1;
+					for (int n : list) {
+						res *= n;
+					}
+					number.add(res);
+				}
+				if (use == '+') {
+					int res = 0;
+					for (int n : list) {
+						res += n;
+					}
+					number.add(res);
+				}
+				
+			}
+		}
+		return number.pop();
+	}
