@@ -1,0 +1,60 @@
+Intro:
+seeking entry level position -> 没必要说，因为都知道。只要说自己哪个学校，有哪些经历就行了。
+what is this about -> 没必要 
+
+say some thoughts -> write code =》中间加一点written description
+
+I will use hashmap for every point to check how many points for a specific slope
+
+smooth => 节奏
+
+
+Question: Given a list of N points in 2D space, determine the maximum number of co-linear points.
+                  .3
+        .0      .4
+        .1    .2
+        
+       Communication overhead
+       Map<Slope, # of points> to record #s per line
+       yline corner case 
+        
+       // point 0 : yline = 1  xline = 1
+       // slope -1 1  
+                1.2 1
+         // 1
+         // point 1 xline = 1, 
+         slope 1.5 1
+               1.8  1
+               max = 1; 1/0
+                
+                // slope 1.7 2
+                // slope 1.7 1      
+       public int maximumColinear(int[][] points) {
+         int max = 0;
+         // iterate each point
+         for (int i = 0; i < points.length; i++) {
+           // for the current point, get the max # of lines going through the point
+           for (int j = i+1; j < points.length; j++) {
+             int  yline = 0;
+             // Use the hashmap to record slope and # of lines
+             HashMap<Float, Integer> slope = new HashMap<>();
+             // check the edge case which is a horizontal line
+             if (points[i][0] == points[j][0]) yline++;
+             else {
+                float s = (points[j][1] - points[i][1])/(float)(points[j][0] - points[i][0]);
+                // if already exist update, if not create
+                slope.put(s, slope.getOrDefault(s, 0) + 1);
+                
+             }
+           }
+           // check the line against the current max
+           int currMax = 0;
+           // Can you avoid surplus computation.
+           for (int k : slope.values()) {
+             currMax = Math.max(k, currMax);
+           }
+           currMax = Math.max(currMax, Math.max(xline, yline));
+           max = Math.max(max, currMax);
+         }
+         return max + 1;
+       }
