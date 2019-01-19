@@ -1,0 +1,34 @@
+class Solution {
+  public static void main(String[] args) {
+    ArrayList<String> strings = new ArrayList<String>();
+    strings.add("Hello, World!");
+    strings.add("Welcome to CoderPad.");
+    strings.add("This pad is running Java " + Runtime.version().feature());
+
+    for (String string : strings) {
+      System.out.println(string);
+    }
+    
+  }
+  public double sqrtHelper(double input) {
+    if (input < 0) return null;          
+    if (input < 1) return helper(input, input, 1); 
+    return helper(input, 1, input);     
+  }                                                                           
+  public double diff = 0.001; threshod 
+  
+  private double helper(double input, double start, double end) {
+    double s = start, e = end;
+    while (Math.abs(s - e) > diff) {
+      double guess = Math.abs(s - e) / 2;
+      double sq = guess*guess;
+      if (Math.abs(sq - input) <= diff) return guess;
+      else if (sq < input) {
+        start = guess;
+      } else {
+        end = guess;
+      }
+    }    
+    return (s + e)/2;
+  }
+}
