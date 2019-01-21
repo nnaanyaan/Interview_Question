@@ -1,0 +1,58 @@
+Implement an algorithm to determine if a string contains all unique characters?
+
+Example String: “Ieal” has all unique characters, but “Idealistic” does not
+
+//I i
+// Al: int[] exist = new int[256] 
+// sort 
+public boolean checkUnique(String s) {
+    if (s == null || s.length() <= 1 ) {
+        return true;
+    }
+    int[] exist = new int[256];
+    for (int i = 0; i < s.length(); i++) {
+        if (exist[s.charAt(i)] == 1) {
+            return false;
+        } else {
+            exist[s.charAt(i)] = 1;
+        }
+    }
+    return true;
+}
+Worst time complexity is O(N)
+average time complexity if implement using sort O(N log N)
+
+Write a function to determine if two string are anagrams of each other?
+An example: night → thing or elbow → below
+//anagrams 
+//algorithm 1.lowercase 2. static int[] map = new int[26] 
+
+
+Write a function to return all prime numbers less than a given number
+A prime number is a number that is only divisible by 1 and itself. 
+// 1, 2, 3, 5, 7, 11, 13, 17, 19, 23, 
+input will a number n 
+output will an array or list of all the prime numbers
+// algorithm : for 1 - N-1 helper() 2 - 
+
+public List<Integer> countPrime(int N) throws Exception{
+    if (N <= 0) throw exception("please input a positive number");
+    List<Integer> ans = new ArrayList<>();
+    ans.add(1);
+    for (int i = 2; i < N; i++) {
+        if (helper(i)) {
+            ans.add(i);
+        }
+    }
+    return ans;
+}
+// helper is a function to judge if current number is prime.
+private boolean helper(int num) {
+    for (int i = 2; i < num; i++) {
+        if (num % i == 0) {
+            return false;
+        }
+    }
+    return true;
+}
+// improvement 
